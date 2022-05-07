@@ -1,0 +1,28 @@
+:root {
+  --accent-color: #f69906;
+  --gray-color: #9f9f9f;
+  --black-color: #313131;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Work Sans', sans-serif;
+  color: white;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.calculator {
+  background-color: black;
+  min-width: 25em;
+  min-height: 45em;
+  display: grid;
+}
