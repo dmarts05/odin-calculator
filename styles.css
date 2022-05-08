@@ -18,7 +18,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: var(--accent-color)
+  background-color: var(--accent-color);
 }
 
 .calculator {
@@ -34,9 +34,27 @@ body {
 }
 
 .calculator .display {
-  font-size: 6em;
-  margin-right: 0.5em;
+  margin-right: 3.5em;
   align-self: flex-end;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: end;
+}
+
+.calculator .display .full-operation {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  min-height: 2em;
+}
+
+.calculator .display .current-number {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  min-height: 1.5em;
+  font-size: 4em;
 }
 
 .calculator .buttons {
