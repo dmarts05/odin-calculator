@@ -18,11 +18,68 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: var(--accent-color)
 }
 
 .calculator {
   background-color: black;
-  min-width: 25em;
-  min-height: 45em;
+  min-width: 35em;
+  min-height: 55em;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 3em;
+  border: 1em solid var(--black-color);
+}
+
+.calculator .display {
+  font-size: 6em;
+  margin-right: 0.65em;
+  align-self: flex-end;
+}
+
+.calculator .buttons {
   display: grid;
+  text-align: center;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5em;
+  font-size: 3em;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  padding: 0.25em;
+  min-width: 100px;
+  min-height: 100px;
+  background-color: var(--black-color);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.button:hover {
+  filter: brightness(110%);
+}
+
+.button:active {
+  transform: scale(110%);
+}
+
+.button.operator {
+  background-color: var(--accent-color);
+}
+
+.button.extra-operator {
+  background-color: var(--gray-color);
+  color: black;
+}
+
+#zero {
+  grid-column: 1 / 3;
+  border-radius: 1em;
+  justify-content: flex-start;
+  padding-left: 0.75em;
 }
