@@ -23,14 +23,15 @@ body {
 
 .calculator {
   background-color: black;
-  min-width: 35em;
-  min-height: 55em;
+  width: 35em;
+  height: 55em;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
   border-radius: 3em;
   border: 1em solid var(--black-color);
+  overflow: hidden;
 }
 
 .calculator .display {
