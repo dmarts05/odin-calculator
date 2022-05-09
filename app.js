@@ -1,15 +1,13 @@
-let fullOperation = [];
-let indexCurrentOperation = 2;
+let fullOperation = '';
+let lastResult = undefined;
+let lastOperator = undefined;
 
 let fullOperationDisplay = document.querySelector('.full-operation');
 let currentDisplayNumber = document.querySelector('.current-number');
 const btns = document.querySelectorAll('.buttons');
 
 function updateFullOperationDisplay() {
-  fullOperationDisplay.textContent = '';
-  fullOperation.forEach(
-    (num) => (fullOperationDisplay.textContent += ' ' + num)
-  );
+  fullOperationDisplay.textContent = fullOperation;
 }
 
 function updateCurrentDisplayNumber(num) {
@@ -17,16 +15,13 @@ function updateCurrentDisplayNumber(num) {
 }
 
 function getResult(operator, num) {
-  let result = num;
-
-  if (indexCurrentOperation + 1 > fullOperation.length) {
-    return result;
+  if (lastResult === undefined) {
+    lastResult = +num;
+    lastOperator = operator;
   } else {
-    result = operate(operator, num, fullOperation[indexCurrentOperation]);
-    indexCurrentOperation += 2;
+    lastResult = operate(lastOperator, +lastResult, +num);
+    lastOperator = operator;
   }
-
-  return result;
 }
 
 function operate(operator, num1, num2) {
@@ -45,22 +40,39 @@ function operate(operator, num1, num2) {
 }
 
 function clear() {
-  fullOperation = [];
-  indexCurrentOperation = 2;
+  lastResult = undefined;
+  lastOperator = undefined;
+  fullOperation = '';
+  updateFullOperationDisplay();
+  clearDisplay();
+}
+
+function clearDisplay() {
   currentDisplayNumber.textContent = '';
 }
 
 function startBtnAction(btnContent) {
+  let inputNumber = currentDisplayNumber.textContent;
+
   switch (btnContent) {
     case '%':
     case '+':
     case '-':
     case '÷':
     case '×':
-      fullOperation.push(currentDisplayNumber.textContent);
-      fullOperation.push(btnContent);
+      fullOperation += inputNumber + ' ';
+      fullOperation += btnContent + ' ';
       updateFullOperationDisplay();
-      updateCurrentDisplayNumber(getResult(btnContent, currentDisplayNumber.textContent));
+      getResult(btnContent, inputNumber);
+      clearDisplay();
+      break;
+    case '=':
+      fullOperation += inputNumber + ' ';
+      fullOperation += btnContent + ' ';
+      updateFullOperationDisplay();
+      getResult(btnContent, inputNumber);
+      clearDisplay();
+      updateCurrentDisplayNumber(lastResult);
       break;
     case 'AC':
       clear();
