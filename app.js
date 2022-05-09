@@ -1,6 +1,7 @@
 let fullOperation = '';
 let lastResult = undefined;
 let lastOperator = undefined;
+let pressedEquals = false;
 
 let fullOperationDisplay = document.querySelector('.full-operation');
 let currentDisplayNumber = document.querySelector('.current-number');
@@ -54,6 +55,11 @@ function clearDisplay() {
 function startBtnAction(btnContent) {
   let inputNumber = currentDisplayNumber.textContent;
 
+  if (pressedEquals) {
+    clear();
+    pressedEquals = false;
+  }
+
   switch (btnContent) {
     case '%':
     case '+':
@@ -73,6 +79,7 @@ function startBtnAction(btnContent) {
       getResult(btnContent, inputNumber);
       clearDisplay();
       updateCurrentDisplayNumber(lastResult);
+      pressedEquals = true;
       break;
     case 'AC':
       clear();
