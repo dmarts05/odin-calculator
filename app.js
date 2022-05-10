@@ -1,33 +1,79 @@
 let fullOperation = '';
 let lastResult = undefined;
 let lastOperator = undefined;
+let numPadDisabled = false;
 
 let fullOperationDisplay = document.querySelector('.full-operation');
-let currentDisplayNumber = document.querySelector('.current-number');
+let currentNumberDisplay = document.querySelector('.current-number');
 const btns = document.querySelectorAll('.buttons');
 const operators = document.querySelectorAll('.operator');
 
-function updateFullOperationDisplay() {
+function launchBtnAction(btn) {
+  if (checkBtnCanBePressed(btn)) {
+    let currentNumber = currentNumberDisplay.textContent;
+
+    switch (btn) {
+      case '%':
+      case '+':
+      case '-':
+      case '÷':
+      case '×':
+        operate(currentNumber, btn);
+        updateFullOperationDisplay(currentNumber, btn);
+        clearCurrentNumberDisplay();
+        numPadDisabled = false;
+        break;
+      case '=':
+        operate(currentNumber, btn);
+        updateFullOperationDisplay(currentNumber, btn);
+        clearCurrentNumberDisplay();
+        updateCurrentNumberDisplay(lastResult);
+        clearStoredNumberOperator();
+        numPadDisabled = true;
+        break;
+      case 'AC':
+        clear();
+        break;
+      case '+/-':
+        changeSign();
+        break;
+      case '.':
+        updateCurrentNumberDisplay(btn);
+        break;
+      default:
+        updateCurrentNumberDisplay(btn);
+        break;
+    }
+  }
+}
+
+function updateFullOperationDisplay(currentNumber, operator) {
+  if (currentNumber !== '' && operator !== '') {
+    fullOperation += currentNumber + ' ';
+    fullOperation += operator + ' ';
+  } else {
+    fullOperation = '';
+  }
+
   fullOperationDisplay.textContent = fullOperation;
 }
 
-function updateCurrentDisplayNumber(num) {
-  currentDisplayNumber.textContent += num;
+function updateCurrentNumberDisplay(num) {
+  currentNumberDisplay.textContent += num;
 }
 
-function getResult(operator, num) {
+function operate(num, operator) {
   if (lastResult === undefined) {
     lastResult = +num;
-    lastOperator = operator;
   } else {
-    lastResult = operate(lastOperator, +lastResult, +num);
-    lastOperator = operator;
+    lastResult = calc(lastOperator, +lastResult, +num);
   }
 
+  lastOperator = operator;
   lastResult = Math.round(lastResult * 100) / 100;
 }
 
-function operate(operator, num1, num2) {
+function calc(operator, num1, num2) {
   switch (operator) {
     case '%':
       return num1 % num2;
@@ -42,77 +88,56 @@ function operate(operator, num1, num2) {
   }
 }
 
-function changeSign() {
-  let inputNumber = currentDisplayNumber.textContent;
+function checkBtnCanBePressed(btn) {
+  if (btn.length > 3) return false; // Prevents user from pressing container instead of buttons
 
-  if (inputNumber.includes('-')) {
-    currentDisplayNumber.textContent = inputNumber.replace('-', '');
-  } else {
-    currentDisplayNumber.textContent = '-' + inputNumber;
-  }
-}
+  let currentNumber = currentNumberDisplay.textContent;
 
-function clear() {
-  lastResult = undefined;
-  lastOperator = undefined;
-  fullOperation = '';
-  updateFullOperationDisplay();
-  clearDisplay();
-}
-
-function clearDisplay() {
-  currentDisplayNumber.textContent = '';
-}
-
-function startBtnAction(btnContent) {
-  // Dirty Fix :/
-  if (btnContent.length > 3) return;
-
-  let inputNumber = currentDisplayNumber.textContent;
-
-  switch (btnContent) {
+  switch (btn) {
     case '%':
     case '+':
     case '-':
     case '÷':
     case '×':
-      if (!inputNumber == '') {
-        fullOperation += inputNumber + ' ';
-        fullOperation += btnContent + ' ';
-        updateFullOperationDisplay();
-        getResult(btnContent, inputNumber);
-        clearDisplay();
-      }
-      break;
     case '=':
-      if (!inputNumber == '') {
-        fullOperation += inputNumber + ' ';
-        fullOperation += btnContent + ' ';
-        updateFullOperationDisplay();
-        getResult(btnContent, inputNumber);
-        clearDisplay();
-        updateCurrentDisplayNumber(lastResult);
-        lastResult = undefined;
-        lastOperator = undefined;
-      }
-      break;
+      return !(currentNumber === '');
     case 'AC':
-      clear();
-      break;
+      return true;
     case '+/-':
-      if (!inputNumber == '') changeSign();
-      break;
+      return !(currentNumber === '') && !numPadDisabled;
     case '.':
-      if (!inputNumber.includes('.')) {
-        updateCurrentDisplayNumber(btnContent);
-      }
-      break;
+      return !currentNumber.includes('.') && !numPadDisabled;
     default:
-      updateCurrentDisplayNumber(btnContent);
-      break;
+      return !numPadDisabled;
+  }
+}
+
+function clear() {
+  numPadDisabled = false;
+  clearStoredNumberOperator();
+  updateFullOperationDisplay('', '');
+  clearCurrentNumberDisplay();
+}
+
+function clearStoredNumberOperator() {
+  lastResult = undefined;
+  lastOperator = undefined;
+}
+
+function clearCurrentNumberDisplay() {
+  currentNumberDisplay.textContent = '';
+}
+
+function changeSign() {
+  let currentNumber = currentNumberDisplay.textContent;
+
+  if (currentNumber.includes('-')) {
+    currentNumberDisplay.textContent = currentNumber.replace('-', '');
+  } else {
+    currentNumberDisplay.textContent = '-' + currentNumber;
   }
 }
 
 btns.forEach((btn) =>
-  btn.addEventListener('click', (e) => startBtnAction(e.target.textContent))
+  btn.addEventListener('click', (e) => launchBtnAction(e.target.textContent))
 );
