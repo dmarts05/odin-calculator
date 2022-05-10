@@ -18,16 +18,17 @@ function launchBtnAction(btn) {
       case '-':
       case '÷':
       case '×':
-        operate(currentNumber, btn);
+        // operate(currentNumber, btn);
         updateFullOperationDisplay(currentNumber, btn);
         clearCurrentNumberDisplay();
         numPadDisabled = false;
         break;
       case '=':
-        operate(currentNumber, btn);
+        // operate(currentNumber, btn);
         updateFullOperationDisplay(currentNumber, btn);
+        let result = fixOperate();
         clearCurrentNumberDisplay();
-        updateCurrentNumberDisplay(lastResult);
+        updateCurrentNumberDisplay(result); //lastResult
         clearStoredNumberOperator();
         numPadDisabled = true;
         break;
@@ -136,6 +137,29 @@ function changeSign() {
   } else {
     currentNumberDisplay.textContent = '-' + currentNumber;
   }
+}
+
+function fixOperate() {
+  const operatorsList = ['×', '÷', '%', '-', '+'];
+  let equation = fullOperation
+    .split(' ')
+    .filter((operator) => operator !== '=' && operator !== '');
+
+  for (let i = 0; i < operatorsList.length; i++) {
+    for (let j = 0; j < equation.length; j++) {
+      if (operatorsList[i] === equation[j]) {
+        let result = calc(operatorsList[i], +equation[j - 1], +equation[j + 1]);
+        equation[j - 1] = String(result);
+        equation.splice(j, j + 1);
+      }
+    }
+  }
+
+  // After equals weird results
+
+  if (fullOperation.includes('=')) fullOperation = '';
+
+  return equation[0];
 }
 
 btns.forEach((btn) =>
