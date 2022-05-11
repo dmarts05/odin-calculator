@@ -141,7 +141,10 @@ function changeSign() {
 
 function backspaceCurrentNumber() {
   const currentNumber = currentNumberDisplay.textContent;
-  currentNumberDisplay.textContent = currentNumber.slice(0, currentNumber.length - 1);
+  currentNumberDisplay.textContent = currentNumber.slice(
+    0,
+    currentNumber.length - 1
+  );
 }
 
 btns.forEach((btn) =>
@@ -165,8 +168,10 @@ document.addEventListener('keydown', (e) => {
     numbers.forEach((btn) => {
       if (btn.textContent.includes(e.key)) btn.click();
     });
+  } else if (e.key === 'Delete') {
+    document.getElementById('clear').click();
   } else if (e.key === 'Backspace') {
-    backspaceCurrentNumber();
+    if (!numPadDisabled) backspaceCurrentNumber();
   } else if (e.key === 'Enter') {
     document.getElementById('equals').click();
   } else if (e.key in operatorsConversion) {
