@@ -1,16 +1,13 @@
 let fullOperation = '';
-let lastResult = undefined;
-let lastOperator = undefined;
 let numPadDisabled = false;
 
-let fullOperationDisplay = document.querySelector('.full-operation');
-let currentNumberDisplay = document.querySelector('.current-number');
+const fullOperationDisplay = document.querySelector('.full-operation');
+const currentNumberDisplay = document.querySelector('.current-number');
 const btns = document.querySelectorAll('.buttons');
-const operators = document.querySelectorAll('.operator');
 
 function launchBtnAction(btn) {
   if (checkBtnCanBePressed(btn)) {
-    let currentNumber = currentNumberDisplay.textContent;
+    const currentNumber = currentNumberDisplay.textContent;
 
     switch (btn) {
       case '%':
@@ -18,18 +15,15 @@ function launchBtnAction(btn) {
       case '-':
       case '÷':
       case '×':
-        // operate(currentNumber, btn);
         updateFullOperationDisplay(currentNumber, btn);
         clearCurrentNumberDisplay();
         numPadDisabled = false;
         break;
       case '=':
-        // operate(currentNumber, btn);
         updateFullOperationDisplay(currentNumber, btn);
-        let result = fixOperate();
+        const result = operate();
         clearCurrentNumberDisplay();
-        updateCurrentNumberDisplay(result); //lastResult
-        clearStoredNumberOperator();
+        updateCurrentNumberDisplay(result);
         numPadDisabled = true;
         break;
       case 'AC':
@@ -63,15 +57,25 @@ function updateCurrentNumberDisplay(num) {
   currentNumberDisplay.textContent += num;
 }
 
-function operate(num, operator) {
-  if (lastResult === undefined) {
-    lastResult = +num;
-  } else {
-    lastResult = calc(lastOperator, +lastResult, +num);
+function operate() {
+  const operators = ['×', '÷', '%', '-', '+'];
+  let equation = fullOperation
+    .split(' ')
+    .filter((operator) => operator !== '=' && operator !== '');
+
+  for (let i = 0; i < operators.length; i++) {
+    for (let j = 0; j < equation.length; j++) {
+      if (operators[i] === equation[j]) {
+        const result = calc(operators[i], +equation[j - 1], +equation[j + 1]);
+        equation[j - 1] = String(result);
+        equation.splice(j, j + 1);
+      }
+    }
   }
 
-  lastOperator = operator;
-  lastResult = Math.round(lastResult * 100) / 100;
+  if (fullOperation.includes('=')) fullOperation = '';
+
+  return equation[0];
 }
 
 function calc(operator, num1, num2) {
@@ -92,7 +96,7 @@ function calc(operator, num1, num2) {
 function checkBtnCanBePressed(btn) {
   if (btn.length > 3) return false; // Prevents user from pressing container instead of buttons
 
-  let currentNumber = currentNumberDisplay.textContent;
+  const currentNumber = currentNumberDisplay.textContent;
 
   switch (btn) {
     case '%':
@@ -115,14 +119,8 @@ function checkBtnCanBePressed(btn) {
 
 function clear() {
   numPadDisabled = false;
-  clearStoredNumberOperator();
   updateFullOperationDisplay('', '');
   clearCurrentNumberDisplay();
-}
-
-function clearStoredNumberOperator() {
-  lastResult = undefined;
-  lastOperator = undefined;
 }
 
 function clearCurrentNumberDisplay() {
@@ -130,36 +128,13 @@ function clearCurrentNumberDisplay() {
 }
 
 function changeSign() {
-  let currentNumber = currentNumberDisplay.textContent;
+  const currentNumber = currentNumberDisplay.textContent;
 
   if (currentNumber.includes('-')) {
     currentNumberDisplay.textContent = currentNumber.replace('-', '');
   } else {
     currentNumberDisplay.textContent = '-' + currentNumber;
   }
-}
-
-function fixOperate() {
-  const operatorsList = ['×', '÷', '%', '-', '+'];
-  let equation = fullOperation
-    .split(' ')
-    .filter((operator) => operator !== '=' && operator !== '');
-
-  for (let i = 0; i < operatorsList.length; i++) {
-    for (let j = 0; j < equation.length; j++) {
-      if (operatorsList[i] === equation[j]) {
-        let result = calc(operatorsList[i], +equation[j - 1], +equation[j + 1]);
-        equation[j - 1] = String(result);
-        equation.splice(j, j + 1);
-      }
-    }
-  }
-
-  // After equals weird results
-
-  if (fullOperation.includes('=')) fullOperation = '';
-
-  return equation[0];
 }
 
 btns.forEach((btn) =>
