@@ -114,6 +114,10 @@ body {
     height: 45em;
   }
 
+  .calculator .display .current-number {
+    font-size: 2.55em;
+  }
+
   .calculator .buttons {
     gap: 0.4em;
   }
