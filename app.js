@@ -36,7 +36,9 @@ function launchBtnAction(btn) {
         updateCurrentNumberDisplay(btn);
         break;
       default:
-        updateCurrentNumberDisplay(btn);
+        if (currentNumber.length < 11) updateCurrentNumberDisplay(btn);
+        else currentNumberDisplay.classList.add('error');
+        setTimeout(() => {currentNumberDisplay.classList.remove('error')}, 100);
         break;
     }
   }
@@ -66,8 +68,7 @@ function operate() {
   for (let i = 0; i < operators.length; i++) {
     for (let j = 0; j < equation.length; j++) {
       if (operators[i] === equation[j]) {
-        const result = calc(operators[i], +equation[j - 1], +equation[j + 1]);
-        equation[j - 1] = String(result);
+        equation[j - 1] = String(calc(operators[i], +equation[j - 1], +equation[j + 1]));
         // Remove used operators
         equation.splice(j, 2);
         j = 0;
@@ -75,9 +76,11 @@ function operate() {
     }
   }
 
+  const result = Math.round(equation[0] * 100) / 100
   if (fullOperation.includes('=')) fullOperation = '';
 
-  return Math.round(equation[0] * 100) / 100;
+  if (String(result).length < 12) return Math.round(equation[0] * 100) / 100;
+  else return Infinity;
 }
 
 function calc(operator, num1, num2) {
