@@ -139,6 +139,11 @@ function changeSign() {
   }
 }
 
+function backspaceCurrentNumber() {
+  const currentNumber = currentNumberDisplay.textContent;
+  currentNumberDisplay.textContent = currentNumber.slice(0, currentNumber.length - 1);
+}
+
 btns.forEach((btn) =>
   btn.addEventListener('click', (e) => launchBtnAction(e.target.textContent))
 );
@@ -161,7 +166,7 @@ document.addEventListener('keydown', (e) => {
       if (btn.textContent.includes(e.key)) btn.click();
     });
   } else if (e.key === 'Backspace') {
-    document.getElementById('clear').click();
+    backspaceCurrentNumber();
   } else if (e.key === 'Enter') {
     document.getElementById('equals').click();
   } else if (e.key in operatorsConversion) {
