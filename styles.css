@@ -36,7 +36,7 @@ body {
 }
 
 .calculator .display {
-  margin-right: 3.5em;
+  margin-right: 3.65em;
   align-self: flex-end;
   display: flex;
   flex-direction: column;
@@ -115,8 +115,12 @@ body {
     height: 45em;
   }
 
+  .calculator .display {
+    margin-right: 2.5em;
+  }
+
   .calculator .display .current-number {
-    font-size: 2.55em;
+    font-size: 2.75em;
   }
 
   .calculator .buttons {
