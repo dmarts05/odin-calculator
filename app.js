@@ -142,3 +142,31 @@ function changeSign() {
 btns.forEach((btn) =>
   btn.addEventListener('click', (e) => launchBtnAction(e.target.textContent))
 );
+
+document.addEventListener('keydown', (e) => {
+  const numbers = document.querySelectorAll('.number');
+  const operators = document.querySelectorAll('.operator');
+  
+  const operatorsConversion = {
+    '*': '×',
+    '/': '÷',
+    '%': '%',
+    '-': '-',
+    '+': '+',
+    '=': '=',
+  };
+
+  if (e.key === '.' || (!isNaN(e.key) && e.key !== ' ')) {
+    numbers.forEach((btn) => {
+      if (btn.textContent.includes(e.key)) btn.click();
+    });
+  } else if (e.key === 'Backspace') {
+    document.getElementById('clear').click();
+  } else if (e.key === 'Enter') {
+    document.getElementById('equals').click();
+  } else if (e.key in operatorsConversion) {
+    operators.forEach((btn) => {
+      if (btn.textContent.includes(operatorsConversion[e.key])) btn.click();
+    });
+  }
+});
