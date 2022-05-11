@@ -48,8 +48,15 @@ function launchBtnAction(btn) {
 
 function updateFullOperationDisplay(currentNumber, operator) {
   if (currentNumber !== '' && operator !== '') {
-    fullOperation += currentNumber + ' ';
-    fullOperation += operator + ' ';
+    if (fullOperation.length < 400 || operator === '=') {
+      fullOperation += currentNumber + ' ';
+      fullOperation += operator + ' ';
+    } else {
+      fullOperationDisplay.classList.add('error');
+      setTimeout(() => {
+        fullOperationDisplay.classList.remove('error');
+      }, 100);
+    }
   } else {
     fullOperation = '';
   }
