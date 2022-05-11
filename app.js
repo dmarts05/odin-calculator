@@ -69,9 +69,7 @@ function operate() {
         const result = calc(operators[i], +equation[j - 1], +equation[j + 1]);
         equation[j - 1] = String(result);
         // Remove used operators
-        equation[j] = undefined;
-        equation[j + 1] = undefined;
-        equation = equation.filter((operator) => operator !== undefined);
+        equation.splice(j, 2);
         j = 0;
       }
     }
