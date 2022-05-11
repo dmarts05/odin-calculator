@@ -146,7 +146,7 @@ btns.forEach((btn) =>
 document.addEventListener('keydown', (e) => {
   const numbers = document.querySelectorAll('.number');
   const operators = document.querySelectorAll('.operator');
-  
+
   const operatorsConversion = {
     '*': '×',
     '/': '÷',
