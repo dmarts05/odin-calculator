@@ -75,7 +75,7 @@ function operate() {
 
   if (fullOperation.includes('=')) fullOperation = '';
 
-  return equation[0];
+  return Math.round(equation[0] * 100) / 100;
 }
 
 function calc(operator, num1, num2) {
