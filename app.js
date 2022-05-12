@@ -173,7 +173,7 @@ document.addEventListener('keydown', (e) => {
     });
   } else if (e.key === 'Delete') {
     document.getElementById('clear').click();
-  } else if (e.key === 'Backspace') {
+  } else if (e.key === 'Backspace' || e.key.toLowerCase() === 'c') {
     if (!numPadDisabled) backspaceCurrentNumber();
   } else if (e.key === 'Enter') {
     document.getElementById('equals').click();
