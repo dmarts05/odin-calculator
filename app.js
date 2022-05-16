@@ -123,7 +123,6 @@ function checkBtnCanBePressed(btn) {
     case '=':
       return !(currentNumber === '');
     case 'AC':
-    case 'C':
       return true;
     case '.':
       return !currentNumber.includes('.') && !numPadDisabled;
